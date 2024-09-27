@@ -4,8 +4,6 @@ import java.util.Scanner;
 
 public class LogicaController {
     public void mostrarMenu(){
-        Scanner sc = new Scanner(System.in);
-        String seleccion;
         System.out.println("****** Menu *******");
         System.out.println("1) De dolar (USD) a Peso Argentino (ARS)");
         System.out.println("2) De Peso Argentino (ARS) a dolar (USD)");
