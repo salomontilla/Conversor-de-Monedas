@@ -1,4 +1,4 @@
 package Modulos;
 
-public record Moneda(String conversion_rates) {
+public record Moneda() {
 }
