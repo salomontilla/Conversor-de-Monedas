@@ -5,16 +5,10 @@ import java.util.Scanner;
 
 public class LogicaController {
     int seleccion;
+    
     public void mostrarMenu(){
         while(true){
-            System.out.println("****** Menu *******");
-            System.out.println("1) De dolar (USD) a Peso Argentino (ARS)");
-            System.out.println("2) De Peso Argentino (ARS) a dolar (USD)");
-            System.out.println("3) De dolar (USD) a Real Brasileño (BRL)");
-            System.out.println("4) De Real Brasileño (BRL) a dolar (USD)");
-            System.out.println("5) De dolar (USD) a Peso Colombiano (COP)");
-            System.out.println("6) De Peso Colombiano (COP) a dolar (USD)");
-            System.out.println("7) Salir");
+            generarOpciones();
             seleccion = seleccion();
             if(seleccion == 7){
                 System.out.println("Saliendo...");
@@ -23,9 +17,19 @@ public class LogicaController {
                 ejecutarSeleccion(seleccion);
             }
         }
-
-
     }
+
+    private void generarOpciones(){
+        System.out.println("****** Menu *******");
+        System.out.println("1) De dolar (USD) a Peso Argentino (ARS)");
+        System.out.println("2) De Peso Argentino (ARS) a dolar (USD)");
+        System.out.println("3) De dolar (USD) a Real Brasileño (BRL)");
+        System.out.println("4) De Real Brasileño (BRL) a dolar (USD)");
+        System.out.println("5) De dolar (USD) a Peso Colombiano (COP)");
+        System.out.println("6) De Peso Colombiano (COP) a dolar (USD)");
+        System.out.println("7) Salir");
+    }
+
     private int seleccion(){
         System.out.println("**************\nIngrese una opcion: ");
         Scanner sc = new Scanner(System.in);
