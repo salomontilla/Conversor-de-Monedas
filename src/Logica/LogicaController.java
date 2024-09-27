@@ -1,11 +1,30 @@
 package Logica;
 
+import Modulos.MonedaApi;
+import com.google.gson.*;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.Scanner;
 
 public class LogicaController {
     int seleccion;
-    
+    private void generarOpciones(){
+        System.out.println("****** Menu *******");
+        System.out.println("1) De dolar (USD) a Peso Argentino (ARS)");
+        System.out.println("2) De Peso Argentino (ARS) a dolar (USD)");
+        System.out.println("3) De dolar (USD) a Real Brasileño (BRL)");
+        System.out.println("4) De Real Brasileño (BRL) a dolar (USD)");
+        System.out.println("5) De dolar (USD) a Peso Colombiano (COP)");
+        System.out.println("6) De Peso Colombiano (COP) a dolar (USD)");
+        System.out.println("7) Salir");
+    }
+
     public void mostrarMenu(){
         while(true){
             generarOpciones();
@@ -17,17 +36,6 @@ public class LogicaController {
                 ejecutarSeleccion(seleccion);
             }
         }
-    }
-
-    private void generarOpciones(){
-        System.out.println("****** Menu *******");
-        System.out.println("1) De dolar (USD) a Peso Argentino (ARS)");
-        System.out.println("2) De Peso Argentino (ARS) a dolar (USD)");
-        System.out.println("3) De dolar (USD) a Real Brasileño (BRL)");
-        System.out.println("4) De Real Brasileño (BRL) a dolar (USD)");
-        System.out.println("5) De dolar (USD) a Peso Colombiano (COP)");
-        System.out.println("6) De Peso Colombiano (COP) a dolar (USD)");
-        System.out.println("7) Salir");
     }
 
     private int seleccion(){
@@ -66,6 +74,35 @@ public class LogicaController {
                 break;
         }
     }
+    public Map<String, Double> hacerPeticion(){
+        try{
+        HttpClient client = HttpClient.newBuilder().build();
+        String url = "https://v6.exchangerate-api.com/v6/d065df8ca8ea08d75badb2a8/latest/USD";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+        HttpResponse<String> response = client
+                .send(request, HttpResponse.BodyHandlers.ofString());
+        String json = response.body();
+
+            Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+                .create();
+            MonedaApi moneda = gson.fromJson(json, MonedaApi.class);
+            return moneda.conversion_rates();
+        }catch (JsonSyntaxException e) {
+            System.err.println("Error en la sintaxis del JSON: " + e.getMessage());
+        } catch (JsonIOException e) {
+            System.err.println("Error durante la lectura del JSON: " + e.getMessage());
+        } catch (IllegalStateException e) {
+            System.err.println("Error al acceder a los datos del JSON: " + e.getMessage());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
 
 
 }

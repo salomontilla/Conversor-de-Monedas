@@ -1,4 +1,4 @@
 package Modulos;
+import java.util.Map;
 
-public record Moneda(String conversion_rates, String usd) {
-}
+public record MonedaApi(Map<String, Double> conversion_rates) {}
