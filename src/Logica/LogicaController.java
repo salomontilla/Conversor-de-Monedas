@@ -53,22 +53,22 @@ public class LogicaController {
     private void ejecutarSeleccion(int opcion){
         switch(opcion){
             case 1:
-                conversion("USD", "ARS", 0);
+                conversion("USD", "ARS", false);
                 break;
             case 2:
-                conversion("ARS", "USD", 1);
+                conversion("ARS", "USD", true);
                 break;
             case 3:
-                conversion("USD", "BRL", 0);
+                conversion("USD", "BRL", false);
                 break;
             case 4:
-                conversion("BRL", "USD", 1);
+                conversion("BRL", "USD", true);
                 break;
             case 5:
-                conversion("USD", "COP", 0);
+                conversion("USD", "COP", false);
                 break;
             case 6:
-                conversion("COP", "USD",1);
+                conversion("COP", "USD",true);
                 break;
             default:
                 System.out.println("Ingresa un valor entre 1 y 7!");
@@ -103,7 +103,7 @@ public class LogicaController {
         }
         return null;
     }
-    private void conversion(String deMoneda, String paraMoneda, int divide){
+    private void conversion(String deMoneda, String paraMoneda, boolean divide){
         Scanner sc = new Scanner(System.in);
         Map<String, Double> monedas = hacerPeticion();
         double valorDe = monedas.get(deMoneda), valorPara = monedas.get(paraMoneda);
@@ -111,7 +111,7 @@ public class LogicaController {
             System.out.println("***** Conversion ****\nIngresa el valor en " + deMoneda +
                     " para convertir a " + paraMoneda);
             double valor = sc.nextDouble();
-            if(divide == 1){
+            if(divide){
                 System.out.println(paraMoneda + ": " + valor / valorDe);
             }else{
                 System.out.println(paraMoneda + ": " + valor * valorPara);
