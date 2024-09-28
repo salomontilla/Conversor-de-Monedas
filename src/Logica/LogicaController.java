@@ -26,6 +26,7 @@ public class LogicaController {
     }
 
     public void mostrarMenu(){
+        seleccion = 0;
         while(true){
             generarOpciones();
             seleccion = seleccion();
@@ -44,7 +45,7 @@ public class LogicaController {
         try{
             return sc.nextInt();
         }catch (InputMismatchException e){
-            System.out.println("Ingrese un numero valido!\n");
+            System.out.println("Ingresa un valor valido!\n");
             mostrarMenu();
             return 0;
         }
@@ -52,29 +53,29 @@ public class LogicaController {
     private void ejecutarSeleccion(int opcion){
         switch(opcion){
             case 1:
-                conversion("USD", "ARS");
+                conversion("USD", "ARS", 0);
                 break;
             case 2:
-                conversion("ARS", "USD");
+                conversion("ARS", "USD", 1);
                 break;
             case 3:
-                conversion("USD", "BRL");
+                conversion("USD", "BRL", 0);
                 break;
             case 4:
-                conversion("BRL", "USD");
+                conversion("BRL", "USD", 1);
                 break;
             case 5:
-                conversion("USD", "COP");
+                conversion("USD", "COP", 0);
                 break;
             case 6:
-                conversion("COP", "USD");
+                conversion("COP", "USD",1);
                 break;
             default:
                 System.out.println("Ingresa un valor entre 1 y 7!");
                 break;
         }
     }
-    public Map<String, Double> hacerPeticion(){
+    private Map<String, Double> hacerPeticion(){
         try{
         HttpClient client = HttpClient.newBuilder().build();
         String url = "https://v6.exchangerate-api.com/v6/d065df8ca8ea08d75badb2a8/latest/USD";
@@ -102,13 +103,22 @@ public class LogicaController {
         }
         return null;
     }
-    private void conversion(String deMoneda, String paraMoneda){
+    private void conversion(String deMoneda, String paraMoneda, int divide){
         Scanner sc = new Scanner(System.in);
-        System.out.println("***** Conversion ****\nIngresa el valor en " + deMoneda +
-                " para convertir a:" + paraMoneda);
-        double valor = sc.nextDouble();
         Map<String, Double> monedas = hacerPeticion();
-        double valorPara = monedas.get(paraMoneda);
-        System.out.println(paraMoneda + ": " + valor * valorPara);
+        double valorDe = monedas.get(deMoneda), valorPara = monedas.get(paraMoneda);
+        try{
+            System.out.println("***** Conversion ****\nIngresa el valor en " + deMoneda +
+                    " para convertir a " + paraMoneda);
+            double valor = sc.nextDouble();
+            if(divide == 1){
+                System.out.println(paraMoneda + ": " + valor / valorDe);
+            }else{
+                System.out.println(paraMoneda + ": " + valor * valorPara);
+            }
+        }catch (InputMismatchException e){
+            System.out.println("Ingresa un valor válido!\n");
+            mostrarMenu();
+        }
     }
 }
