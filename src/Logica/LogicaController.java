@@ -134,11 +134,11 @@ public class LogicaController {
     private void guardarConversion(String valorDe, String valorPara, double resultadoConver, double valor) {
 
         String conversion =  valor + valorDe + " --> " + df.format(resultadoConver)+ valorPara + " : "
-                + getCurrentTime();
+                + getFechaActual();
         listaConversiones.add(conversion);
     }
 
-    private String getCurrentTime(){
+    private String getFechaActual(){
         LocalDateTime lt = LocalDateTime.now();
         String fecha = lt.getDayOfMonth() + "/" +
                 lt.getMonthValue() + "/" +  lt.getYear() + " a las " + lt.getHour() + ":" + lt.getMinute();
