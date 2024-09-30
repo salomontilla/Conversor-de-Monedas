@@ -8,9 +8,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.InputMismatchException;
-import java.util.Map;
-import java.util.Scanner;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class LogicaController {
     int seleccion;
@@ -22,7 +22,8 @@ public class LogicaController {
         System.out.println("4) De Real Brasileño (BRL) a dolar (USD)");
         System.out.println("5) De dolar (USD) a Peso Colombiano (COP)");
         System.out.println("6) De Peso Colombiano (COP) a dolar (USD)");
-        System.out.println("7) Salir");
+        System.out.println("7) Ver Historial de búsquedas");
+        System.out.println("8) Salir");
     }
 
     public void mostrarMenu(){
@@ -30,7 +31,7 @@ public class LogicaController {
         while(true){
             generarOpciones();
             seleccion = seleccion();
-            if(seleccion == 7){
+            if(seleccion == 8){
                 System.out.println("Saliendo...");
                 break;
             }else{
@@ -70,8 +71,11 @@ public class LogicaController {
             case 6:
                 conversion("COP", "USD",true);
                 break;
+            case 7:
+                mostrarHistorial();
+                break;
             default:
-                System.out.println("Ingresa un valor entre 1 y 7!");
+                System.out.println("Ingresa un valor entre 1 y 8!");
                 break;
         }
     }
@@ -103,22 +107,60 @@ public class LogicaController {
         }
         return null;
     }
+    DecimalFormat df = new DecimalFormat("#.00");
     private void conversion(String deMoneda, String paraMoneda, boolean divide){
+
         Scanner sc = new Scanner(System.in);
         Map<String, Double> monedas = hacerPeticion();
-        double valorDe = monedas.get(deMoneda), valorPara = monedas.get(paraMoneda);
+        double valorDe = monedas.get(deMoneda), valorPara = monedas.get(paraMoneda), conversion = 0;
         try{
             System.out.println("***** Conversion ****\nIngresa el valor en " + deMoneda +
                     " para convertir a " + paraMoneda);
             double valor = sc.nextDouble();
             if(divide){
-                System.out.println(paraMoneda + ": " + valor / valorDe);
+                conversion = valor / valorDe;
+                System.out.println(paraMoneda + ": " + df.format(conversion));
             }else{
-                System.out.println(paraMoneda + ": " + valor * valorPara);
+                conversion = valor * valorPara;
+                System.out.println(paraMoneda + ": " + df.format(conversion));
             }
+            guardarConversion(deMoneda, paraMoneda, conversion, valor);
         }catch (InputMismatchException e){
             System.out.println("Ingresa un valor válido!\n");
             mostrarMenu();
+        }
+    }
+    List<String> listaConversiones = new ArrayList<>();
+    private void guardarConversion(String valorDe, String valorPara, double resultadoConver, double valor) {
+
+        String conversion =  valor + valorDe + " --> " + df.format(resultadoConver)+ valorPara + " : "
+                + getCurrentTime();
+        listaConversiones.add(conversion);
+    }
+
+    private String getCurrentTime(){
+        LocalDateTime lt = LocalDateTime.now();
+        String fecha = lt.getDayOfMonth() + "/" +
+                lt.getMonthValue() + "/" +  lt.getYear() + " a las " + lt.getHour() + ":" + lt.getMinute();
+        return fecha;
+    }
+    private void mostrarHistorial(){
+        while (true) {
+
+            System.out.println("***** Historial *****");
+            if(listaConversiones.isEmpty()){
+                System.out.println("No hay nada que mostrar!");
+            }else{
+                for(int i = 0; i < listaConversiones.size(); i++) {
+                    System.out.println(i+1 +".)" + listaConversiones.get(i)+"\n");
+                }
+            }
+
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Presiona cualquier numero para volver: ");
+            try{
+                if(sc.hasNextInt()){break;}
+            }catch (InputMismatchException e){mostrarHistorial();}
         }
     }
 }
