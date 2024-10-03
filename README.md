@@ -10,7 +10,7 @@ La aplicación de conversión de monedas es una herramienta que permite a los us
    NOTA: Las opciones estan dadas de la siguiente manera:
       - La moneda de origen (en código ISO 4217, por ejemplo, USD para dólar estadounidense).
       - La moneda de destino (en código ISO 4217, por ejemplo, COP para peso colombiano).
-!["Imagen Opciones"](https://drive.google.com/file/d/1N55-18YW23P52KMxT80PRJ-wBe6qTnWW/view)
+!["Imagen Opciones"](https://drive.google.com/file/d/1N55-18YW23P52KMxT80PRJ-wBe6qTnWW/view?usp=sharing)
 2. Ingresar la cantidad a convertir.
 3. La aplicación consultará la tasa de cambio actual y mostrará el valor convertido.
 ### Adicional
